@@ -5,7 +5,7 @@ const Redis = require('ioredis');
 const app = express();
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/testdb';
-const redisHost = process.env.REDIS_HOST || 'localhost';
+const redisHost = process.env.REDIS_HOST; // in secret
 const redisPort = process.env.REDIS_PORT || 6379;
 
 // Zmienna sprawdzająca, czy jesteśmy w trybie testowym:
