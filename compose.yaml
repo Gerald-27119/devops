@@ -37,5 +37,5 @@ services:
         condition: service_healthy
     environment:
       MONGO_URI: mongodb://mongo:27017/testdb
-      # REDIS_HOST: redis
+      REDIS_HOST: redis
       REDIS_PORT: 6379
