@@ -39,10 +39,3 @@ services:
       MONGO_URI: mongodb://mongo:27017/testdb
       REDIS_HOST:
       REDIS_PORT: 6379
-      REDIS_PORT_FILE: /run/secrets/REDIS_PORT_ID
-    secrets:
-      - REDIS_PORT_ID
-
-secrets:
-  REDIS_PORT:
-    file: ./secrets/redis_port.txt

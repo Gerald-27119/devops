@@ -7,9 +7,9 @@ const app = express();
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/testdb';
 const redisHost = process.env.REDIS_HOST; // in secret
-// const redisPort = process.env.REDIS_PORT || 6379;
+const redisPort = process.env.REDIS_PORT || 6379;
 
-const redisPort = fs.readFileSync(process.env.REDIS_PORT_FILE, 'utf8').trim();
+// const redisPort = fs.readFileSync(process.env.REDIS_PORT_FILE, 'utf8').trim();
 
 // Zmienna sprawdzająca, czy jesteśmy w trybie testowym:
 const isTest = process.env.NODE_ENV === 'test';
