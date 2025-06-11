@@ -21,13 +21,12 @@ on:
           - staging
           - production
 env:
-    REDIS_HOST: ${{ secrets.REDIS_HOST }}
-    
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+
 jobs:
   ################################################
   # 1. Faza wstępna (równoległe: lint, audit, format)
   ################################################
-  
 
   lint:
     name: Lint (ESLint)
