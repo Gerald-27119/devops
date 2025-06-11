@@ -4,3 +4,5 @@ coverage/
 image.tar
 *.log
 .env
+secrets
+secrets/
