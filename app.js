@@ -8,7 +8,6 @@ const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/testdb';
 const redisHost = process.env.REDIS_HOST; // in secret
 const redisPort = process.env.REDIS_PORT || 6379;
 
-
 // Zmienna sprawdzająca, czy jesteśmy w trybie testowym:
 const isTest = process.env.NODE_ENV === 'test';
 
