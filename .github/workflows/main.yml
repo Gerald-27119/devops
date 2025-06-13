@@ -66,8 +66,7 @@ jobs:
       - lint
       - unit_tests
       - build
-      - deploy_staging
-      - deploy_production
+
     if: always()
     steps:
       - run: |
@@ -75,8 +74,6 @@ jobs:
           echo "Lint: ${{ needs.lint.result }}"            >> raport.txt
           echo "Unit Tests: ${{ needs.unit_tests.result }}" >> raport.txt
           echo "Build: ${{ needs.build.result }}"          >> raport.txt
-          echo "Staging: ${{ needs.deploy_staging.result }}">> raport.txt
-          echo "Production: ${{ needs.deploy_production.result || 'skipped' }}" >> raport.txt
       - uses: actions/upload-artifact@v4
         with:
           name: pipeline-report
