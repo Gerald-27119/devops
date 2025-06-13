@@ -78,7 +78,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: docker-image
-      - run: echo ">>> Symulacja: obraz wdrożony na staging."
+      - run: echo ">>> Symulacja obraz wdrożony na staging."
       - run: echo ">>> Teraz pipeline poczeka na akceptację produkcji."
 
   deploy_production:
