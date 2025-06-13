@@ -2,6 +2,16 @@ name: 'Pipeline CI/CD'
 
 on:
   push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
+      - develop
   workflow_dispatch:
 
 jobs:
@@ -19,6 +29,7 @@ jobs:
   unit_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
+    needs: lint
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -45,7 +56,9 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/kolos:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/kolos:latest
           load: true
           push: false
       - run: docker save ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }} -o image.tar
@@ -55,39 +68,27 @@ jobs:
           path: image.tar
 
   deploy_staging:
-    name: Deploy Staging (manual approval to prod)
+    name: Deploy to Staging
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/master'
+    if: ${{ github.ref == 'refs/heads/master' }}
     environment:
       name: staging
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: docker-image
-          
-      - run: echo ">>> Symulacja obraz wdrożony na staging."
-      - run: echo ">>> Użytkownik decyduje czy wdrażać na produkcję."
-
-  approve_production:
-    name: Approve Production Deploy
-    runs-on: ubuntu-latest
-    needs: deploy_staging
-    if: github.ref == 'refs/heads/master'
-    environment:
-      name: production
-      # Manual approval required in GitHub UI for prod environment
-    steps:
-      - run: echo "Manual approval for production deploy. Jeśli zatwierdzisz, ruszy deploy_production."
+      - run: echo ">>> Symulacja: obraz wdrożony na staging."
+      - run: echo ">>> Teraz pipeline poczeka na akceptację produkcji."
 
   deploy_production:
-    name: Deploy Production
+    name: Deploy to Production
     runs-on: ubuntu-latest
-    needs: approve_production
-    if: github.ref == 'refs/heads/master'
+    needs: deploy_staging
+    if: ${{ github.ref == 'refs/heads/master' }}
+    environment:
+      name: production  # ← tu będzie wymagane ręczne OK w UI
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: docker-image
@@ -97,8 +98,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - run: docker load -i image.tar
-      - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }}
-      - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kolos:latest
+      - run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/kolos:latest
 
   final_report:
     name: Final Report
@@ -112,11 +114,11 @@ jobs:
       - name: Generate simple report
         run: |
           echo "==== Pipeline Report ====" > raport.txt
-          echo "Lint: ${{ needs.build.result }}" >> raport.txt
+          echo "Lint: ${{ needs.lint.result }}"            >> raport.txt
           echo "Unit Tests: ${{ needs.unit_tests.result }}" >> raport.txt
-          echo "Build: ${{ needs.build.result }}" >> raport.txt
-          echo "Deploy Staging: ${{ needs.deploy_staging.result }}" >> raport.txt
-          echo "Deploy Production: ${{ needs.deploy_production.result }}" >> raport.txt
+          echo "Build: ${{ needs.build.result }}"          >> raport.txt
+          echo "Staging: ${{ needs.deploy_staging.result }}">> raport.txt
+          echo "Production: ${{ needs.deploy_production.result }}" >> raport.txt
       - name: Upload pipeline report
         uses: actions/upload-artifact@v4
         with:
