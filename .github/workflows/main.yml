@@ -66,7 +66,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: docker-image
-      - run: echo ">>> Symulacja: obraz wdrożony na staging."
+          
+      - run: echo ">>> Symulacja obraz wdrożony na staging."
       - run: echo ">>> Użytkownik decyduje czy wdrażać na produkcję."
 
   approve_production:
