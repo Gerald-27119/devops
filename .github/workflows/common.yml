@@ -59,7 +59,7 @@ jobs:
           path: image.tar
 
   deploy_staging:
-    if: github.ref == 'refs/heads/master'
+    if: always() && github.ref == 'refs/heads/master'
     name: Deploy to Staging
     runs-on: ubuntu-latest
     needs: build
@@ -73,7 +73,7 @@ jobs:
           echo ">>> Symulacja obraz wdrożony na staging."
 
   deploy_production:
-    if: github.ref == 'refs/heads/master'
+    if: always() && github.ref == 'refs/heads/master'
     name: Deploy to Production
     runs-on: ubuntu-latest
     needs: deploy_staging
