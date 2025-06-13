@@ -90,7 +90,7 @@ jobs:
       - run: docker load -i image.tar
       - run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/kolos:${{ github.sha }}
-
+# test
   final_report:
     name: Final Report
     runs-on: ubuntu-latest
