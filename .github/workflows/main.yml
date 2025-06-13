@@ -4,10 +4,8 @@ on:
   push:
     branches-ignore:
       - master
-#test
 jobs:
   lint:
-    if: github.ref != 'refs/heads/master'
     name: Lint (ESLint)
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +17,6 @@ jobs:
       - run: npm run lint
 
   unit_tests:
-    if: github.ref != 'refs/heads/master'
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
@@ -66,8 +63,6 @@ jobs:
       - lint
       - unit_tests
       - build
-      - deploy_staging
-      - deploy_production
     if: always()
     steps:
       - run: |
