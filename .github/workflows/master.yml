@@ -68,8 +68,6 @@ jobs:
     name: Final Report
     runs-on: ubuntu-latest
     needs:
-      - lint
-      - unit_tests
       - build
       - deploy_staging
       - deploy_production
@@ -77,8 +75,6 @@ jobs:
     steps:
       - run: |
           echo "==== Pipeline Report ====" > raport.txt
-          echo "Lint: ${{ needs.lint.result }}"            >> raport.txt
-          echo "Unit Tests: ${{ needs.unit_tests.result }}" >> raport.txt
           echo "Build: ${{ needs.build.result }}"          >> raport.txt
           echo "Staging: ${{ needs.deploy_staging.result }}">> raport.txt
           echo "Production: ${{ needs.deploy_production.result || 'skipped' }}" >> raport.txt
