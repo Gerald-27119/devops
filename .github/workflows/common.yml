@@ -101,6 +101,7 @@ jobs:
       - deploy_staging
       - deploy_production
     if: always()
+#    a
     steps:
       - run: |
           echo "==== Pipeline Report ====" > raport.txt
