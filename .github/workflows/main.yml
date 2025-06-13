@@ -67,7 +67,7 @@ jobs:
         with:
           name: docker-image
       - run: |
-          echo ">>> Symulacja: obraz wdrożony na staging."
+          echo ">>> Symulacja obraz wdrożony na staging."
 
   deploy_production:
     name: Deploy to Production
