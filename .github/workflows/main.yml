@@ -4,7 +4,7 @@ on:
   push:
     branches-ignore:
       - master
-
+#test
 jobs:
   lint:
     if: github.ref != 'refs/heads/master'
